@@ -1,0 +1,90 @@
+{
+  "$id": "./sso.json#",
+  "definitions": {
+    "RegisterNewUser": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "$ref": "./defs/C_SERVICES.json#",
+          "const": "Sso"
+        },
+        "request": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "const": "RegisterNewUser"
+            },
+            "params": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "password": {
+                  "type": "string",
+                  "minLength": 8
+                }
+              },
+              "required": ["email", "password"]
+            }
+          },
+          "required": ["action", "params"]
+        },
+        "response": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean"
+            }
+          },
+          "required": ["success"]
+        }
+      }
+    },
+    "LoginByEmail": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "$ref": "./defs/C_SERVICES.json#",
+          "const": "Sso"
+        },
+        "request": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "const": "LoginByEmail"
+            },
+            "params": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "password": {
+                  "type": "string",
+                  "minLength": 8
+                }
+              },
+              "required": ["email", "password"]
+            }
+          },
+          "required": ["action"]
+        },
+        "response": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean"
+            },
+            "token": {
+              "type": "string"
+            }
+          },
+          "required": ["success"]
+        }
+      }
+    }
+  }
+}

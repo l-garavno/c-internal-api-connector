@@ -1,0 +1,7 @@
+{
+  "space": true,
+  "prettier": true,
+  "rules": {
+    "n/prefer-global/process": "off"
+  }
+}

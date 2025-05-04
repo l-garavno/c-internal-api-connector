@@ -1,0 +1,54 @@
+{
+  "name": "@l-garavno/c-internal-api-connector",
+  "version": "0.0.0",
+  "description": "Type definitions for C-Service",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "clean": "rm -rf ./dist",
+    "build": "rm -rf ./dist && tsup src/index.ts --format cjs,esm --dts --clean",
+    "test": "vitest run",
+    "format": "xo --fix ./src",
+    "check-format": "xo --check ./src"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.2",
+    "dotenv": "^16.5.0",
+    "prettier": "^3.5.3",
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.2",
+    "xo": "^0.60.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/l-garavno/c-internal-api-connector"
+  },
+  "bugs": {
+    "url": "https://github.com/l-garavno/c-internal-api-connector/issues"
+  },
+  "keywords": [
+    "typescript",
+    "library"
+  ],
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "author": "L-Garavno",
+  "license": "MIT",
+  "homepage": "https://github.com/l-garavno/c-internal-api-connector#readme",
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "axios": "^1.9.0"
+  }
+}

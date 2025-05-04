@@ -1,0 +1,46 @@
+{
+  "$id": "./user.json#",
+  "definitions": {
+    "GetProfile": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "$ref": "./defs/C_SERVICES.json#",
+          "const": "User"
+        },
+        "request": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "const": "GetProfile"
+            },
+            "params": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
+          },
+          "required": ["action", "params"]
+        },
+        "response": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            }
+          },
+          "required": ["id", "name"]
+        }
+      }
+    }
+  }
+}
