@@ -1,0 +1,49 @@
+{
+  "$id": "./bot.json#",
+  "definitions": {
+    "GetAvailableBots": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "$ref": "./defs/C_SERVICES.json#",
+          "const": "Bot"
+        },
+        "request": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "const": "GetAvailableBots"
+            },
+            "params": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "page": {
+                  "type": "number"
+                },
+                "limit": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "required": ["action", "params"]
+        },
+        "response": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean"
+            }
+          },
+          "required": ["success"]
+        }
+      }
+    }
+  }
+}

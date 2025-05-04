@@ -1,6 +1,6 @@
 {
   "name": "@l-garavno/c-internal-api-connector",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Type definitions for C-Service",
   "type": "module",
   "main": "./dist/index.cjs",

@@ -6,6 +6,21 @@ export class ApiServices {
   // ===============================
   // Auto-generated services
   // ===============================
+  bot = {
+    getAvailableBots: async (parameters: {
+      id?: string;
+      name?: string;
+      page?: number;
+      limit?: number;
+    }) => {
+      return this.#call<{ success: boolean }>({
+        service: 'bot',
+        action: 'GetAvailableBots',
+        params: parameters,
+      });
+    },
+  };
+
   sso = {
     registerNewUser: async (parameters: {
       email: string;
@@ -34,13 +49,25 @@ export class ApiServices {
         params: parameters,
       });
     },
+    changePassword: async (parameters: {
+      id: string;
+      password: string;
+      oldPassword?: string;
+      newPassword?: string;
+    }) => {
+      return this.#call<{ success: boolean }>({
+        service: 'user',
+        action: 'ChangePassword',
+        params: parameters,
+      });
+    },
   };
   // ===============================
 
   #token: string | undefined;
   // eslint-disable-next-line @typescript-eslint/class-literal-property-style
   readonly #monitorMode = false;
-  // eslint-disable-next-line @typescript-eslint/class-literal-property-style
+
   readonly #baseSchemaUrl = process.env.BASE_SCHEMA_URL;
 
   #validate: ValidateFunction | undefined;
@@ -63,6 +90,7 @@ export class ApiServices {
     if (!this.#baseSchemaUrl) {
       return;
     }
+
     const schemaUrl = `${this.#baseSchemaUrl}/base.json#`;
     const response = await axios.get<AnySchemaObject>(schemaUrl);
 

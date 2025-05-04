@@ -41,6 +41,52 @@
           "required": ["id", "name"]
         }
       }
+    },
+    "ChangePassword": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "$ref": "./defs/C_SERVICES.json#",
+          "const": "User"
+        },
+        "request": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "const": "ChangePassword"
+            },
+            "params": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "password": {
+                  "deprecated": true,
+                  "type": "string"
+                },
+                "oldPassword": {
+                  "type": "string"
+                },
+                "newPassword": {
+                  "type": "string"
+                }
+              },
+              "required": ["id", "password"]
+            }
+          },
+          "required": ["action", "params"]
+        },
+        "response": {
+          "type": "object",
+          "properties": {
+            "success": {
+              "type": "boolean"
+            }
+          },
+          "required": ["success"]
+        }
+      }
     }
   }
 }

@@ -1,6 +1,7 @@
+/* eslint-disable unicorn/no-array-push-push */
+import fs from 'node:fs';
+import { execSync } from 'node:child_process';
 import dotenv from 'dotenv';
-import fs from 'fs';
-import { execSync } from 'child_process';
 
 run();
 
@@ -12,6 +13,7 @@ function run() {
   if (!AWS_S3_BUCKET || !AWS_PROFILE) {
     throw new Error('AWS_S3_BUCKET and AWS_PROFILE must be set');
   }
+
   execSync(
     `aws s3 sync ${AWS_S3_BUCKET}/configs/service-schema/ ./configs/service-schema/ --profile ${AWS_PROFILE}`,
   );
@@ -19,7 +21,7 @@ function run() {
 
   generateServiceCaller(files);
 
-  // execSync(`yarn format`);
+  execSync(`yarn format`);
 }
 
 function generateServiceCaller(files) {
@@ -32,35 +34,7 @@ export class ApiServices {
   // ===============================
   // Auto-generated services
   // ===============================
-  sso = {
-    registerNewUser: async (parameters: {
-      email: string;
-      password: string;
-    }) => {
-      return this.#call<{ success: boolean }>({
-        service: 'sso',
-        action: 'RegisterNewUser',
-        params: parameters,
-      });
-    },
-    loginByEmail: async (parameters: { email: string; password: string }) => {
-      return this.#call<{ success: boolean; token?: string }>({
-        service: 'sso',
-        action: 'LoginByEmail',
-        params: parameters,
-      });
-    },
-  };
-
-  user = {
-    getProfile: async (parameters: { id: string }) => {
-      return this.#call<{ id: string; name: string }>({
-        service: 'user',
-        action: 'GetProfile',
-        params: parameters,
-      });
-    },
-  };
+  /* TODO: add your own services here!!! */
   // ===============================
 
   #token: string | undefined;
@@ -155,26 +129,28 @@ export class ApiServices {
     const definitions = schema.definitions || {};
 
     lines.push(`${tab}${service} = {`);
-    Object.entries(definitions).forEach(([method, definition]) => {
-      const params = definition.properties.request.properties.params;
+    for (const [method, definition] of Object.entries(definitions)) {
+      const parameters = definition.properties.request.properties.params;
       const response = definition.properties.response;
       lines.push(
-        `${tab}${tab}${toCamelCase(method)}: (params: ${typeGenerator(params)}) => {`,
+        `${tab}${tab}${toCamelCase(method)}: (params: ${typeGenerator(parameters)}) => {`,
       );
       lines.push(
         `${tab}${tab}${tab}return this.#call<${typeGenerator(
           response,
         )}>({ service: '${service}', action: '${method}', params })`,
+        `${tab}${tab}},`,
       );
-      lines.push(`${tab}${tab}},`);
-    });
+    }
+
     lines.push(`${tab}}`);
   }
+
   code = code.replace(
     '  /* TODO: add your own services here!!! */',
     lines.join('\n'),
   );
-  fs.writeFileSync(`./src/api-services/index.ts`, code);
+  fs.writeFileSync(`./src/api-service/index.ts`, code);
 }
 
 function typeGenerator({ type, items, properties, required }) {
@@ -183,22 +159,32 @@ function typeGenerator({ type, items, properties, required }) {
     : {};
   // Ref: https://json-schema.org/understanding-json-schema/reference/type
   switch (type) {
-    case 'null':
+    case 'null': {
       return 'null';
-    case 'string':
+    }
+
+    case 'string': {
       return 'string';
+    }
+
     case 'number':
-    case 'integer':
+    case 'integer': {
       return 'number';
-    case 'boolean':
+    }
+
+    case 'boolean': {
       return 'boolean';
-    case 'array':
+    }
+
+    case 'array': {
       if (items) {
         return `Array<${typeGenerator(items)}>`;
-      } else {
-        throw new Error('Array with no items is not supported');
       }
-    case 'object':
+
+      throw new Error('Array with no items is not supported');
+    }
+
+    case 'object': {
       return `{ ${Object.entries(properties)
         .map(([key, value]) => {
           const v = typeGenerator(value);
@@ -206,13 +192,16 @@ function typeGenerator({ type, items, properties, required }) {
           return `${k}: ${v}`;
         })
         .join(', ')} }`;
-    default:
+    }
+
+    default: {
       throw new Error('Unsupported type');
+    }
   }
 }
 
 function toCamelCase(string) {
-  return string.replace(/(?:^|_)(\w)/g, (_, letter) => letter.toLowerCase());
+  return string.replaceAll(/(?:^|_)(\w)/g, (_, letter) => letter.toLowerCase());
 }
 
 function _load(file) {

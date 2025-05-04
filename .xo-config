@@ -2,6 +2,7 @@
   "space": true,
   "prettier": true,
   "rules": {
+    "n/file-extension-in-import": "off",
     "n/prefer-global/process": "off"
   }
 }
